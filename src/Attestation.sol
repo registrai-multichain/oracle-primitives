@@ -73,7 +73,7 @@ contract Attestation {
         // Plain attestation path — agent posts the value directly. Disallowed
         // when the agent is bound to a rule contract; use attestWithRule then.
         if (REGISTRY.ruleOf(feedId, msg.sender) != address(0)) revert AgentHasRule();
-        return _record(feedId, msg.sender, value, inputHash, false);
+        return _record(feedId, msg.sender, value, inputHash);
     }
 
     /// @notice Verifiable-agent attestation. Agent must be registered via
@@ -89,10 +89,10 @@ contract Attestation {
         if (rule == address(0)) revert AgentHasNoRule();
         int256 value = IAgentRule(rule).submit(rawInputs);
         bytes32 inputHash = keccak256(abi.encode(rawInputs));
-        return _record(feedId, msg.sender, value, inputHash, true);
+        return _record(feedId, msg.sender, value, inputHash);
     }
 
-    function _record(bytes32 feedId, address agent, int256 value, bytes32 inputHash, bool verifiable)
+    function _record(bytes32 feedId, address agent, int256 value, bytes32 inputHash)
         internal
         returns (bytes32 attestationId)
     {
@@ -137,17 +137,17 @@ contract Attestation {
         if (att.status == DisputeStatus.ResolvedValid || att.status == DisputeStatus.ResolvedInvalid) {
             revert InvalidStatusTransition();
         }
-        bool wasSlashable = att.status == DisputeStatus.Pending;
         att.status = status;
         emit StatusUpdated(attestationId, status);
 
         if (status == DisputeStatus.ResolvedInvalid) {
             _repairLatestPointer(att.feedId, att.agent, attestationId);
         }
-        // `wasSlashable` is preserved here for forkers who want to plug in
-        // a points/credits/slash-hook contract — see the registrai-multichain
-        // /contracts repo for a reference RegistraiPoints integration.
-        wasSlashable; // silence unused-var warning
+        // Forkers who want to integrate a points/credits/slash-hook contract
+        // can add the call here, gated on `att.status == DisputeStatus.Pending`
+        // before the reassignment above (read it earlier in the function).
+        // See registrai-multichain/contracts for a reference RegistraiPoints
+        // integration pattern.
     }
 
     /// @dev If the just-invalidated attestation was the cached "latest valid", walk back to
