@@ -1,0 +1,14 @@
+# Foundry artifacts
+out/
+cache/
+broadcast/
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Env (never commit secrets)
+.env
+.env.*
+!.env.example
