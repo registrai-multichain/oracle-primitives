@@ -1,0 +1,26 @@
+{
+  "network": "X Layer Testnet",
+  "chainId": 1952,
+  "rpc": "https://testrpc.xlayer.tech",
+  "explorer": "https://www.oklink.com/x-layer-testnet",
+  "deployedAt": "2026-05-27",
+  "deployer": "0x01557bee69eF61764c27e11Ff638c1b3C2c5C82f",
+  "contracts": {
+    "TestUSD": "0x6527aba5149Ff6077fa8cf168Dd952990d2588a8",
+    "Registry": "0xD9c552376958908e372D5464e439C9DAA65A6545",
+    "Attestation": "0x40B113C75720E1C9F4310C469da47A36e92fB0E5",
+    "Dispute": "0xA1B68B5B19B5746d06Ae9839BF1a238426F28572",
+    "Markets": "0xb9c01c28c49aF48E4498d30b1F7A9DD17a0df5DE",
+    "RegistraiPoints": "0x7FE2E8CFCff3D968BBCcF80bec5bBB255FBf15ae",
+    "Seeder": "0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e"
+  },
+  "seeded": {
+    "feed": "Warsaw average residential price per m2, secondary sale (PLN/sqm)",
+    "feedId": "0x97ce9fa16fef8e90a35de873ac46b6e8f9168455eef8c788dc510c5637c96626",
+    "agent": "0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e",
+    "attestedValue": 17850,
+    "market": "Warsaw residential PLN/m2 > 17,000",
+    "marketId": "0xb537a57906548e719bc2ceb44b3bcaeeec78ed87ca8ae5682b9cbd8db624b043",
+    "seedTx": "0xe94622facc6d642fb69d54f5779067b39f2f8cb02aab5e4bc65b93a246356487"
+  }
+}

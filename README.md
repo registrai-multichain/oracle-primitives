@@ -1,10 +1,38 @@
 # Oracle Primitives
 
 > **Permissionless bonded oracle agents + verifiable rule-bytecode aggregation.**
-> Fork-and-ship infrastructure for any [Arc](https://arc.io) app that needs to settle USDC against real-world facts.
+> Fork-and-ship infrastructure for any EVM app that needs to settle against real-world facts — **live on [X Layer](https://www.okx.com/xlayer) and [Arc](https://arc.io)**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Live on X Layer](https://img.shields.io/badge/live%20on-X%20Layer-d4ff3f.svg)](https://www.oklink.com/x-layer-testnet)
 [![Built on Arc](https://img.shields.io/badge/built%20on-Arc-blue.svg)](https://arc.io)
+
+---
+
+## Live on X Layer Testnet (chainId 1952)
+
+Real contracts, a real bonded feed, and a real prediction market — readable on-chain right now.
+
+| Contract | Address |
+|---|---|
+| Registry | [`0xD9c552376958908e372D5464e439C9DAA65A6545`](https://www.oklink.com/x-layer-testnet/address/0xD9c552376958908e372D5464e439C9DAA65A6545) |
+| Attestation | [`0x40B113C75720E1C9F4310C469da47A36e92fB0E5`](https://www.oklink.com/x-layer-testnet/address/0x40B113C75720E1C9F4310C469da47A36e92fB0E5) |
+| Dispute | [`0xA1B68B5B19B5746d06Ae9839BF1a238426F28572`](https://www.oklink.com/x-layer-testnet/address/0xA1B68B5B19B5746d06Ae9839BF1a238426F28572) |
+| Markets | [`0xb9c01c28c49aF48E4498d30b1F7A9DD17a0df5DE`](https://www.oklink.com/x-layer-testnet/address/0xb9c01c28c49aF48E4498d30b1F7A9DD17a0df5DE) |
+| Seeder / first bonded agent | [`0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e`](https://www.oklink.com/x-layer-testnet/address/0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e) |
+| TestUSD (test collateral, 6 dec, open mint) | [`0x6527aba5149Ff6077fa8cf168Dd952990d2588a8`](https://www.oklink.com/x-layer-testnet/address/0x6527aba5149Ff6077fa8cf168Dd952990d2588a8) |
+
+**Seeded feed** — *Warsaw average residential price per m², secondary sale (PLN/sqm)*
+feedId `0x97ce9fa16fef8e90a35de873ac46b6e8f9168455eef8c788dc510c5637c96626` · attested **17,850 PLN/m²** by the bonded agent.
+
+**Live market** — *Warsaw resi > 17,000 PLN/m²*
+marketId `0xb537a57906548e719bc2ceb44b3bcaeeec78ed87ca8ae5682b9cbd8db624b043` · 50/50 reserves · trade fee split 40 bps creator / 20 bps agent / 10 bps treasury.
+
+**One transaction created the feed + attestation + market atomically** — [seed tx on OKLink](https://www.oklink.com/x-layer-testnet/tx/0xe94622facc6d642fb69d54f5779067b39f2f8cb02aab5e4bc65b93a246356487).
+
+**Live dApp reading it:** **<https://xlayer.registrai.cc/markets>** — the page shows that market, read live via `getMarket`/`priceOf`.
+
+Full deployment record: [`deployments/xlayer-testnet.json`](deployments/xlayer-testnet.json).
 
 ---
 
