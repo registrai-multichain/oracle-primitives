@@ -11,26 +11,18 @@
 
 ## Live on X Layer Testnet (chainId 1952)
 
-Real contracts, a real bonded feed, and a real prediction market — readable on-chain right now.
+Real contracts and a real bonded feed — readable on-chain right now.
 
 | Contract | Address |
 |---|---|
 | Registry | [`0xD9c552376958908e372D5464e439C9DAA65A6545`](https://www.oklink.com/x-layer-testnet/address/0xD9c552376958908e372D5464e439C9DAA65A6545) |
 | Attestation | [`0x40B113C75720E1C9F4310C469da47A36e92fB0E5`](https://www.oklink.com/x-layer-testnet/address/0x40B113C75720E1C9F4310C469da47A36e92fB0E5) |
 | Dispute | [`0xA1B68B5B19B5746d06Ae9839BF1a238426F28572`](https://www.oklink.com/x-layer-testnet/address/0xA1B68B5B19B5746d06Ae9839BF1a238426F28572) |
-| Markets | [`0xb9c01c28c49aF48E4498d30b1F7A9DD17a0df5DE`](https://www.oklink.com/x-layer-testnet/address/0xb9c01c28c49aF48E4498d30b1F7A9DD17a0df5DE) |
 | Seeder / first bonded agent | [`0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e`](https://www.oklink.com/x-layer-testnet/address/0x7Ee23FaeCA9dd4A7bee5709f8136f9cea8fE754e) |
 | TestUSD (test collateral, 6 dec, open mint) | [`0x6527aba5149Ff6077fa8cf168Dd952990d2588a8`](https://www.oklink.com/x-layer-testnet/address/0x6527aba5149Ff6077fa8cf168Dd952990d2588a8) |
 
 **Seeded feed** — *Warsaw average residential price per m², secondary sale (PLN/sqm)*
 feedId `0x97ce9fa16fef8e90a35de873ac46b6e8f9168455eef8c788dc510c5637c96626` · attested **17,850 PLN/m²** by the bonded agent.
-
-**Live market** — *Warsaw resi > 17,000 PLN/m²*
-marketId `0xb537a57906548e719bc2ceb44b3bcaeeec78ed87ca8ae5682b9cbd8db624b043` · 50/50 reserves · trade fee split 40 bps creator / 20 bps agent / 10 bps treasury.
-
-**One transaction created the feed + attestation + market atomically** — [seed tx on OKLink](https://www.oklink.com/x-layer-testnet/tx/0xe94622facc6d642fb69d54f5779067b39f2f8cb02aab5e4bc65b93a246356487).
-
-**Live dApp reading it:** **<https://xlayer.registrai.cc/markets>** — the page shows that market, read live via `getMarket`/`priceOf`.
 
 Full deployment record: [`deployments/xlayer-testnet.json`](deployments/xlayer-testnet.json).
 
@@ -126,19 +118,19 @@ Anyone watching the chain can pull `rawInputs` from the attestation's calldata, 
 ```solidity
 import {Attestation} from "oracle-primitives/Attestation.sol";
 
-contract MyPredictionMarket {
+contract MyEscrow {
     Attestation public immutable ORACLE;
 
-    function resolve(bytes32 marketId) external {
-        Market storage m = markets[marketId];
+    function settle(bytes32 dealId) external {
+        Deal storage d = deals[dealId];
         (int256 value, bool finalized) = ORACLE.valueAt(
-            m.feedId,
-            m.agent,
-            m.expiry
+            d.feedId,
+            d.agent,
+            d.deadline
         );
         require(finalized, "not finalized yet");
-        m.outcome = (value > m.threshold);
-        // ... pay out winners
+        d.released = (value >= d.target);
+        // ... release the USDC, or refund it
     }
 }
 ```
@@ -160,7 +152,7 @@ This repo handles the **data-trust layer** that sits underneath any app needing 
 ```
 ┌────────────────────────────────────────┐
 │  Your Arc app (commerce / payments /    │
-│  prediction markets / lending / ...)    │
+│  lending / insurance / ...)             │
 └──────────────────┬─────────────────────┘
                    │ reads valueAt(feedId, agent, t)
                    ▼
@@ -285,9 +277,7 @@ Once deployed, any agent can bind to it during registration. Aggregation rules b
 
 These live in [`registrai-multichain/contracts`](https://github.com/registrai-multichain/contracts) as a separate reference application:
 
-- `Markets.sol` — FPMM prediction markets that resolve against agent attestations
 - `CirqueLending.sol` — cirBTC × USDC lending pool dogfooded on the BTC oracle
-- `MarketMakerVault.sol` — pooled USDC liquidity for market makers
 - `RegistraiPoints.sol` — soulbound participation credits
 
 They're real production code, but they're **applications built on top of these primitives** — not primitives themselves. Anyone forking should start here.
